@@ -21,7 +21,7 @@ def build_adopter_info_from_match_questions(mq: dict) -> dict:
         "Adopter_Size_Pref": (mq.get("p3", [""])[0]).lower(),
         "Adopter_Age_Min": _to_int(mq.get("p2", {}).get("fromAge", ""), 0),
         "Adopter_Age_Max": _to_int(mq.get("p2", {}).get("toAge", ""), 999),
-        "Adopter_Animal_Pref": (mq.get("p1", [""])),
+        "Adopter_Animal_Pref": (mq.get("p1", [""]))[0].lower(),
     }
 
 # Helper: find the first doc with matchQuestions
@@ -41,7 +41,7 @@ env_model_path = os.getenv("MODEL_PATH", "model.joblib")
 _model: SimplePetMatcherClassifier = joblib.load(env_model_path)
 
 # MongoDB connection
-db_uri = os.getenv("MONGO_URI")
+db_uri ="mongodb+srv://khoacode1305:0opVku5gamFs8WmZ@cluster0.2w7bffk.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster0"
 client = MongoClient(db_uri, tls=True, tlsCAFile=certifi.where())
 db = client.get_default_database()  # uses database in URI or 'test'
 
@@ -60,13 +60,13 @@ def predict():
     mq = {
         "a1": data["a1"],
         "a3": data["a3"],
-        "p1": data["p1"],
+        "p1": ["Dog"],
         "p2": data["p2"],
         "p3": data["p3"],
         "p4": data["p4"]
     }
-
-    print(mq.get("a1", ""))
+    print(data["a1"])
+    print(mq.get("p1", ""))
     adopter_info = build_adopter_info_from_match_questions(
         mq
     )

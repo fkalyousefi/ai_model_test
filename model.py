@@ -37,7 +37,7 @@ class SimplePetMatcherClassifier:
         df = pets_df[["Animal_ID", "Species", "Breed", "Age", "Weight", "Sex"]].copy()
         pref = adopter_info.get("Adopter_Animal_Pref", "")
         if pref:
-            df = df[df["Species"]]
+            df = df[df["Species"].str.lower() == pref.lower()]
         for k, v in adopter_info.items():
             df[k] = v
         for col in self.feature_cols:
